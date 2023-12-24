@@ -1,6 +1,7 @@
 from tkinter import *
 import random
 
+#checks the current turn between players
 def next_turn(row, column):
     
     global player
@@ -25,22 +26,42 @@ def next_turn(row, column):
             elif check_winner() == "Tie":
                 label.config(text=("Tie"))
 
+#checks if there a a winner after a box is selected
 def check_winner():
+    # checks row for winner
     for row in range(3):
         if buttons[row][0]['text'] == buttons[row][1]['text'] == buttons[row][2]['text'] != "":
+            buttons[row][0].config(bg="red")
+            buttons[row][1].config(bg="red")
+            buttons[row][2].config(bg="red")
             return True
+    # checks column for winner
     for column in range(3):
         if buttons[0][column]['text'] == buttons[1][column]['text'] == buttons[2][column]['text'] != "":
-            return True    
+            buttons[0][column].config(bg="red")
+            buttons[1][column].config(bg="red")
+            buttons[2][column].config(bg="red")
+            return True
+    # checks diagonal for winner
     if buttons[0][0]['text'] == buttons[1][1]['text'] == buttons[2][2]['text'] != "":
+        buttons[0][0].config(bg="red")
+        buttons[1][1].config(bg="red")
+        buttons[2][2].config(bg="red")
         return True
     elif buttons[0][2]['text'] == buttons[1][1]['text'] == buttons[2][0]['text'] != "":
+        buttons[0][2].config(bg="red")
+        buttons[1][1].config(bg="red")
+        buttons[2][0].config(bg="red")
         return True
     elif empty_spaces() is False:
+        for row in range(3):
+            for column in range(3):
+                buttons[row][column].config(bg="purple")
         return "Tie"
     else:
         return False
-    
+
+# checks for remaining spaces, used for checking tie
 def  empty_spaces():
     spaces = 9
     for row in range(3):
@@ -52,8 +73,14 @@ def  empty_spaces():
     else:
         return True
 
+# restarts the game
 def new_game():
-    pass
+    global player
+    player = random.choice(players)
+    label.config(text=player + " turn")
+    for row in range(3):
+        for column in range(3):
+            buttons[row][column].config(text="", bg="#F0F0F0")
 
 
 window = Tk()
